@@ -1,0 +1,56 @@
+sudo: required
+language: node_js
+node_js:
+  - '8'
+cache:
+  directories:
+    - ~/.npm
+    - node_modules
+notifications:
+  email: false
+services:
+  - docker
+addons:
+  sonarcloud:
+    organization: seantrane-github
+git:
+  depth: false
+branches:
+  only:
+    - master
+    - /^greenkeeper.*$/
+env:
+  global:
+    - PATH=$HOME/.local/bin:$PATH
+    - PATH=$PWD:$PATH
+before_install:
+  # package-lock.json was introduced in npm@5
+  - '[[ $(node -v) =~ ^v9.*$ ]] || npm install -g npm@latest' # skipped when using node 9
+  - npm install -g github-label-sync greenkeeper-lockfile lerna typescript
+install:
+  - travis_retry npm install
+stages:
+  - test
+  - name: deploy
+    if: repo = seantrane/serverless
+        AND type != pull_request
+        AND branch = master
+jobs:
+  include:
+    - stage: test
+      name: 'Checks and Tests'
+      script:
+        - '[[ $TRAVIS_BRANCH =~ ^greenkeeper.*$ ]] && greenkeeper-lockfile-update || echo "Skipping greenkeeper-lockfile-update";'
+        - '[[ $TRAVIS_BRANCH =~ ^greenkeeper.*$ ]] && npm audit || echo "Skipping npm audit";'
+        - commitlint-travis
+        - npm run lint
+        # - lerna run build
+        - travis_retry github-label-sync -a "$GH_TOKEN" -l 'https://git.io/fAe5i' seantrane/serverless
+        - npm test
+        - '[[ $TRAVIS_BRANCH = master ]] && sonar-scanner || echo "Skipping sonar-scanner";'
+        - '[[ $TRAVIS_BRANCH =~ ^greenkeeper.*$ ]] && greenkeeper-lockfile-upload || echo "Skipping greenkeeper-lockfile-upload";'
+    - stage: deploy
+      name: 'Publish and Release'
+      script:
+        - echo "Release is skipped until enabled..."
+        # - lerna exec --concurrency 1 "npx --no-install semantic-release -e semantic-release-monorepo"
