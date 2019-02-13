@@ -1,0 +1,7 @@
+--exit
+--recursive
+--reporter spec
+--require ts-node/register
+--require source-map-support/register
+--timeout 3000
+--watch-extensions tsx,ts
