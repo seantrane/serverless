@@ -1,0 +1,25 @@
+service: serverless-hello
+
+package:
+  exclude:
+    - node_modules/**/*
+  include:
+    handler.ts
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+
+functions:
+  hello:
+    handler: handler.hello
+    # AWS APIGateway:
+    # config 'hello' Lambda function to expose path '/hello' to HTTP GET request.
+    events:
+      - http:
+          path: hello
+          method: get

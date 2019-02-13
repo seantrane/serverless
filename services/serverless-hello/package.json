@@ -1,0 +1,43 @@
+{
+  "name": "@seantrane/serverless-hello",
+  "version": "0.0.0",
+  "description": "A serverless hello world example",
+  "author": "@seantrane",
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/seantrane/serverless/tree/master/services/serverless-hello#readme",
+  "repository": "github.com:seantrane/serverless",
+  "bugs": "https://github.com/seantrane/serverless/issues",
+  "private": true,
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "main": "handler.js",
+  "directories": {
+    "dist": "handler.js",
+    "lib": "handler.js",
+    "output": "coverage",
+    "root": "../..",
+    "src": "src",
+    "test": "__tests__"
+  },
+  "files": [
+    "handler.js",
+    "serverless.yml"
+  ],
+  "scripts": {
+    "build": "npm run clean:dist && tsc",
+    "clean:dist": "shx rm -rf $npm_package_directories_dist",
+    "clean:output": "shx rm -rf $npm_package_directories_output .nyc_output",
+    "clean": "npm run clean:dist && npm run clean:output",
+    "start": "serverless offline start",
+    "lint:ts:report": "tslint -t json -o $npm_package_directories_output/unit-report.json $npm_package_directories_src/**/*.ts",
+    "lint:ts": "tslint $npm_package_directories_src/**/*.ts",
+    "lint": "npm run lint:ts",
+    "prepare": "npm run build",
+    "test:mocha": "npm run clean:output && nyc mocha --opts $npm_package_directories_root/mocha.opts ./**/*.test.ts",
+    "test": "npm run test:mocha && npm run lint:ts:report"
+  },
+  "nyc": {
+    "extends": "@seantrane/nyc-config-typescript"
+  }
+}
