@@ -4,10 +4,10 @@
   "version": "0.0.0-development",
   "author": "@seantrane",
   "license": "ISC",
-  "private": true,
   "homepage": "https://github.com/seantrane/serverless#readme",
   "repository": "github:seantrane/serverless",
   "bugs": "https://github.com/seantrane/serverless/issues",
+  "private": true,
   "directories": {
     "lib": "services",
     "output": "coverage"
@@ -104,7 +104,8 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-push": "npm run ci"
     }
   },
   "nyc": {
