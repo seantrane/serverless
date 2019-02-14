@@ -78,7 +78,7 @@
     "lerna": "^3.11.1",
     "markdownlint-cli": "^0.13.0",
     "mocha": "^5.2.0",
-    "nyc": "^13.2.0",
+    "nyc": "^13.3.0",
     "semantic-release": "^15.13.3",
     "semantic-release-monorepo": "^6.1.1",
     "serverless": "^1.37.1",
