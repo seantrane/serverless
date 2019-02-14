@@ -83,6 +83,7 @@ _site
 /mocha.json
 /out-tsc
 /services/**/coverage
+/services/*/*.js*
 /temp
 /tmp
 /typings
